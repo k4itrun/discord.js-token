@@ -2,7 +2,7 @@
     "name": "discord.js-token",
     "version": "1.0.0",
     "deprecated": false,
-    "description": "look at the information of a discord token",
+    "description": "This model was created in order to obtain information from a user simply with the token, easy and fast.",
     "main": "index.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1"
