@@ -1,0 +1,16 @@
+# Generated modules and dependencies
+node_modules/
+
+# Codes
+test/
+
+# Log files & json
+package-lock.json
+npm-debug.log
+yarn-error.log
+
+# Backup files
+*.bak
+
+# Environment variables
+.env
