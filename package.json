@@ -1,0 +1,36 @@
+{
+    "name": "discord.js-token",
+    "version": "1.0.0",
+    "deprecated": false,
+    "description": "look at the information of a discord token",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "repository": {
+        "type": "git",
+        "url": "https://github.com/k4itrun/discord.js-token"
+    },
+    "keywords": [
+        "http",
+        "discord",
+        "tokeninformation",
+        "tokens",
+        "token",
+        "discordapi",
+        "https",
+        "cache",
+        "request",
+        "discord.js",
+        "discord.js-selfbot-v13",
+        "sync"
+    ],
+    "author": "k4itrun",
+    "license": "MIT",
+    "dependencies": {
+        "sync-request": "^6.1.0"
+    },
+    "engines": {
+        "node": ">=20.x"
+    }
+}
