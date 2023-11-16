@@ -1,6 +1,6 @@
 {
     "name": "discord.js-token",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "deprecated": false,
     "description": "This model was created in order to obtain information from a user simply with the token, easy and fast.",
     "main": "index.js",
