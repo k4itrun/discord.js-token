@@ -28,6 +28,7 @@
     "author": "k4itrun",
     "license": "MIT",
     "dependencies": {
+        "sync-fetch": "^0.5.2",
         "sync-request": "^6.1.0"
     },
     "engines": {

