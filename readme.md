@@ -1,4 +1,20 @@
-# Disocrd.js-token
+
+<div align="center">
+  <p>
+    <a href="https://www.npmjs.com/package/discord.js-token"><img src="https://nodei.co/npm/discord.js-token.png?downloads=true&stars=true" alt="npm install discord.js-token" /></a>
+  </p>
+  <p>
+    <a href="https://www.npmjs.com/package/discord.js-token">
+      <img src="https://img.shields.io/npm/v/discord.js-token.svg?maxAge=3600&style=for-the-badge&logo=npm&logoColor=red" alt="NPM version" />
+    </a>
+    <a href="https://www.npmjs.com/package/discord.js-token">
+      <img src="https://img.shields.io/npm/dt/discord.js-token.svg?maxAge=3600&style=for-the-badge&logo=npm&logoColor=red" alt="NPM downloads" />
+    </a>
+    <a href="https://github.com/k4itrun/discord.js-token/blob/main/methods.md/">
+      <img src="https://img.shields.io/badge/Documation-%230288D1.svg?style=for-the-badge&logo=gitbook&logoColor=white" alt="Get Started Now">
+    </a>
+  </p>
+</div>
 
 ## Description
 
