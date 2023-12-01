@@ -28,8 +28,8 @@
     "author": "k4itrun",
     "license": "MIT",
     "dependencies": {
-        "sync-fetch": "^0.5.2",
-        "sync-request": "^6.1.0"
+        "node-fetch": "^3.3.2",
+        "sync-fetch": "^0.5.2"
     },
     "engines": {
         "node": ">=16.0.0"
