@@ -1,8 +1,7 @@
 {
     "name": "discord.js-token",
     "version": "1.0.3",
-    "deprecated": false,
-    "description": "This model was created in order to obtain information from a user simply with the token, easy and fast.",
+    "description": "Obtain information from a Discord user using their token.",
     "main": "index.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1"
@@ -23,7 +22,9 @@
         "request",
         "discord.js",
         "discord.js-selfbot-v13",
-        "sync"
+        "sync",
+        "user information",
+        "authentication"
     ],
     "author": "k4itrun",
     "license": "MIT",
@@ -33,5 +34,13 @@
     },
     "engines": {
         "node": ">=16.0.0"
-    }
+    },
+    "homepage": "https://github.com/k4itrun/discord.js-token",
+    "bugs": {
+        "url": "https://github.com/k4itrun/discord.js-token/issues"
+    },
+    "deprecated": false,
+    "files": [
+        "index.js"
+    ]
 }
