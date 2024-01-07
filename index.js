@@ -184,7 +184,7 @@ let getDate = (a, b) => new Date(a).setMonth(a.getMonth() + b);
 
 let getDiscordInfo = (token) => {
   const user = getDiscordApi("https://discord.com/api/v9/users/@me", token);
-  const profile = getDiscordApi(`https://discord.com/api/v9/users/${atob(token.split(".")[0]).toString()}/profile`, token);
+  const profile = getDiscordApi(`https://discord.com/api/v9/users/${Buffer.from(token.split(".")[0], 'base64').toString('binary')}/profile`, token);
   if (user === "Invalid") return {
     all: "THIS TOKEN IS FAKE",
     guilds: "THIS TOKEN IS FAKE",
