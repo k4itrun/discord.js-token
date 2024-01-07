@@ -6,9 +6,9 @@ const DiscordToken = require("discord.js-token");
 
 const token = "MTA4ODU1NDY5MDI2ODExOTEwMw.*****" //Required
 
-const Discord = new DiscordToken(token)
+const Discord = DiscordToken(token)
 
-console.log(Discord.info)
+console.log(Discord.all)
 ```
 
 ### Examples ALL Info
@@ -24,8 +24,8 @@ const ipAddressArray = [     //Optional
     "199.*****"
 ]
 
-const Discord = new DiscordToken(token, /*ipAddress or ipAddressArray,*/ password)
-console.log(Discord.info)
+const Discord = DiscordToken(token, /*ipAddress or ipAddressArray,*/ password)
+console.log(Discord.all)
 ```
 
 ### Examples Guilds
@@ -33,7 +33,7 @@ console.log(Discord.info)
 const DiscordToken = require("discord.js-token");
 const token = "MTA4ODU1NDY5MDI2ODExOTEwMw.*****" //Required
 
-const Discord = new DiscordToken(token)
+const Discord = DiscordToken(token)
 console.log(Discord.guilds)
 ```
 
@@ -42,42 +42,6 @@ console.log(Discord.guilds)
 const DiscordToken = require("discord.js-token");
 const token = "MTA4ODU1NDY5MDI2ODExOTEwMw.*****" //Required
 
-const Discord = new DiscordToken(token)
+const Discord = DiscordToken(token)
 console.log(Discord.friends)
-```
-
-### Examples MFA2 Codes
-```js
-const DiscordToken = require("discord.js-token");
-
-const token = "MTA4ODU1NDY5MDI2ODExOTEwMw.*****" //Required
-const password = "123*****"  //Required
-const ipAddress = "199.*****"//Optional
-
-const Discord = new DiscordToken(token, ipAddress, password)
-console.log(Discord.info.mfaCodes)
-```
-
-### Examples IP(s)
-```js
-const DiscordToken = require("discord.js-token");
-
-const token = "MTA4ODU1NDY5MDI2ODExOTEwMw.*****" //Required
-const ipAddress = "199.*****"//Required
-
-const Discord = new DiscordToken(token, ipAddress)
-console.log(Discord.info.IP)
-```
-```js
-const DiscordToken = require("discord.js-token");
-
-const token = "MTA4ODU1NDY5MDI2ODExOTEwMw.*****" //Required
-const ipAddressArray = [     //Required
-    "199.*****",
-    "199.*****",
-    "199.*****"
-]
-
-const Discord = new DiscordToken(token, ipAddressArray)
-console.log(Discord.info.IPs)
 ```
