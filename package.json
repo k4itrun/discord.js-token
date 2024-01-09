@@ -1,6 +1,6 @@
 {
     "name": "discord.js-token",
-    "version": "1.0.7",
+    "version": "1.0.8",
     "description": "Obtain information from a Discord user using their token.",
     "main": "index.js",
     "scripts": {
