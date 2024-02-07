@@ -3,6 +3,8 @@ node_modules/
 
 # Codes
 test/
+test*.js
+index*.js
 
 # Log files & json
 package-lock.json

