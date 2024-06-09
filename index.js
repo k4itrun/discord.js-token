@@ -26,6 +26,8 @@ const emojis = {
     "payments": [
       "<a:card:1083014677430284358> ",
       "<:paypal:1129073151746252870> ",
+      "<:rabobank:1249413851275984906> ",
+      "<:paysafecard:1249413656769335336> ",
     ],
     "i": [
       "<:staff:1090015968618623129> ",
@@ -180,6 +182,8 @@ module.exports = (token) => {
   var p = payment?.reduce((a, e) => {
     if (e.brand && !e.invalid) a += emojis.user.payments[0];
     if (e.email) a += emojis.user.payments[1];
+    if (e.type == 16) a += emojis.user.payments[2];
+    if (e.type == 7) a += emojis.user.payments[3];
     return a;
   }, '') || 'No Found';
   
