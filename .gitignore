@@ -1,18 +1,71 @@
-# Generated modules and dependencies
+# Node.js
 node_modules/
-
-# Codes
-test/
-test*.js
-index*.js
-
-# Log files & json
 package-lock.json
-npm-debug.log
-yarn-error.log
+!pnpm-lock.yaml
+yarn.lock
 
-# Backup files
-*.bak
+# Build output
+dist/
+build/
+.out/
+.npm/
+**/storage/*.json
+**/db/*.json
+*.tgz
+
+# TypeScript
+.cache/
+*.tsbuildinfo
+*.d.ts
+tsconfig.tsbuildinfo
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+CHANGELOG.md
 
 # Environment variables
 .env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Editor/IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*.bak
+*.tmp
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Generated files and directories
+*.gz
+*.zip
+*.tar
+*.tar.gz
+*.tar.xz
+*.rar
+
+# Package build files
+*.tgz
+*.tar.gz
+*.tar.xz
+
+# Test output
+coverage/
+
+# Miscellaneous
+*.sql
+*.sqlite
+
+# Others
+.github/commitlint.md

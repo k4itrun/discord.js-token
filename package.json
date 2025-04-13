@@ -1,45 +1,58 @@
 {
-    "name": "discord.js-token",
-    "version": "1.0.8",
-    "description": "Obtain information from a Discord user using their token.",
-    "main": "index.js",
-    "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1"
-    },
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/k4itrun/discord.js-token"
-    },
-    "keywords": [
-        "http",
-        "discord",
-        "tokeninformation",
-        "tokens",
-        "token",
-        "discordapi",
-        "https",
-        "cache",
-        "request",
-        "discord.js",
-        "discord.js-selfbot-v13",
-        "sync",
-        "user information",
-        "authentication"
-    ],
-    "author": "k4itrun",
-    "license": "MIT",
-    "dependencies": {
-        "sync-fetch": "^0.5.2"
-    },
-    "engines": {
-        "node": ">=16.0.0"
-    },
-    "homepage": "https://github.com/k4itrun/discord.js-token",
-    "bugs": {
-        "url": "https://github.com/k4itrun/discord.js-token/issues"
-    },
-    "deprecated": false,
-    "files": [
-        "index.js"
-    ]
+  "name": "discord.js-token",
+  "version": "1.0.8",
+  "description": "Obtain information from a Discord user using their token.",
+  "deprecated": true,
+  "exports": null,
+  "type": "commonjs",
+  "scripts": {
+    "format": "prettier . --write --cache --ignore-unknown",
+    "format:check": "prettier . --check --cache --ignore-unknown",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
+  },
+  "engines": {
+    "node": "22.x"
+  },
+  "files": [
+    "index.js"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/k4itrun/discord.js-token.git"
+  },
+  "keywords": [
+    "discord",
+    "discord.js",
+    "discord.js-selfbot-v13",
+    "discord API",
+    "token",
+    "tokens",
+    "token information",
+    "user authentication",
+    "user information",
+    "http",
+    "https",
+    "request",
+    "cache",
+    "sync",
+    "authentication"
+  ],
+  "author": {
+    "name": "k4itrun",
+    "email": "contact@w1sh.xyz"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/k4itrun/discord.js-token/issues"
+  },
+  "homepage": "https://github.com/k4itrun/discord.js-token#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "@k4i/eslint-config": "^2.0.0",
+    "@k4i/prettier-config": "^2.0.0",
+    "sync-fetch": "^0.5.2",
+    "eslint": "^8.55.0",
+    "prettier": "^3.0.0"
+  }
 }
