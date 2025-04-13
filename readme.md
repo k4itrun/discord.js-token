@@ -13,6 +13,7 @@
       <img src="https://img.shields.io/badge/Documation-%230288D1.svg?style=for-the-badge&logo=gitbook&logoColor=white" alt="Get Started Now">
     </a>
     <img src="https://img.shields.io/badge/%20Status-Not%20in%20Maintenance-lightgrey?style=for-the-badge&logo=github" alt="Maintenance Status" />
+    <img src="https://img.shields.io/badge/%F0%9F%93%A6%20Archived-Since%20Sep%2027,%202024-ffc107?style=for-the-badge" alt="Archived since Sep 27, 2024" />
   </p>
 </div>
 
