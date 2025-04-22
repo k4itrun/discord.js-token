@@ -1,71 +1,130 @@
-# Node.js
-node_modules/
-package-lock.json
-!pnpm-lock.yaml
-yarn.lock
+# Logs
+*.log
+**/logs/
+lerna-debug.log*
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Editors
+.idea/
+.tern-port
+.vscode/*
+!.vscode/settings.json
+!.vscode/extensions.json
 
 # Build output
 dist/
 build/
+lib/
+.next/
+.nuxt/
+.vuepress/dist/
+.serverless/
 .out/
-.npm/
-**/storage/*.json
-**/db/*.json
-*.tgz
+public/
+.contentlayer/
+next*.d.ts
 
-# TypeScript
+# Coverage and test outputs
+coverage/
+.nyc_output/
+*.lcov
+.vitest/
+test-results/
+*.spec.ts.snap
+
+# Cache
 .cache/
+.rpt2_cache/
+.rts2_cache_*/
+.turbo/
+.eslintcache
+.prettier-cache
+.stylelintcache
 *.tsbuildinfo
-*.d.ts
-tsconfig.tsbuildinfo
+*.type-check-cache.json
+.pnpm-debug.log*
 
-# Logs
-logs/
-*.log
-npm-debug.log*
-pnpm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-CHANGELOG.md
+# Diagnostic reports
+report.*.json
 
-# Environment variables
-.env
-.env.local
-.env.development.local
-.env.test.local
-.env.production.local
+# Dependency directories
+node_modules/
+bower_components/
+jspm_packages/
+.pnpm-store/
 
-# Editor/IDE
-.vscode/
-.idea/
+# Package manager state
+.yarn-integrity
+.pnp.*
+.yarn/
+
+# Misc
+.DS_Store
+.lock-wscript
+Thumbs.db
+*.bak
+*.orig
+*.tmp
+*.tgz
+*.pid
+*.pid.lock
+*.seed
 *.swp
 *.swo
+
+# Local services
+.dynamodb/
+
+# SQLite
+*.sqlite
+*.sqlite3
+*.db
+*.db3
+*.sql
+*.bak
+*.sqlite-wal
+*.sqlite-shm
+
+# MongoDB
+dump/
+*.bson
+*.ns
+
+# PostgreSQL / MySQL dumps
+*.sql
+*.sql.gz
+*.pgsql
+*.mysql
+
+# Firebase local emulators
+firebase-debug.log
+firebase-export.json
+.firestore/
+
+# Prisma SQLite local
+prisma/dev.db
+prisma/*.sqlite
+prisma/*.sqlite3
+
+# Other backup files
 *.bak
 *.tmp
+*.old
+*.swp
 
-# OS generated files
-.DS_Store
-Thumbs.db
+# Docker volumes (if using named volumes and storing db stuff)
+volumes/
 
-# Generated files and directories
-*.gz
-*.zip
-*.tar
-*.tar.gz
-*.tar.xz
-*.rar
-
-# Package build files
-*.tgz
-*.tar.gz
-*.tar.xz
-
-# Test output
-coverage/
-
-# Miscellaneous
-*.sql
-*.sqlite
-
-# Others
-.github/commitlint.md
+# Custom
+commitlint.md
+CHANGELOG.md
+**/\[id\]/
+**/\[db\]/

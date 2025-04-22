@@ -1,22 +1,21 @@
 {
   "name": "discord.js-token",
-  "version": "1.0.8",
   "description": "Obtain information from a Discord user using their token.",
+  "version": "1.0.8",
   "deprecated": true,
-  "exports": null,
   "type": "commonjs",
+  "exports": {
+    ".": {
+      "import": "./src/index.js",
+      "require": "./src/index.js"
+    }
+  },
   "scripts": {
     "format": "prettier . --write --cache --ignore-unknown",
     "format:check": "prettier . --check --cache --ignore-unknown",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix"
   },
-  "engines": {
-    "node": "22.x"
-  },
-  "files": [
-    "index.js"
-  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/k4itrun/discord.js-token.git"
@@ -24,35 +23,34 @@
   "keywords": [
     "discord",
     "discord.js",
-    "discord.js-selfbot-v13",
-    "discord API",
     "token",
-    "tokens",
-    "token information",
-    "user authentication",
-    "user information",
-    "http",
-    "https",
-    "request",
-    "cache",
-    "sync",
-    "authentication"
+    "user",
+    "information",
+    "api",
+    "fetch",
+    "sync-fetch"
   ],
   "author": {
     "name": "k4itrun",
-    "email": "contact@w1sh.xyz"
+    "email": "billoneta@proto.me"
   },
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/k4itrun/discord.js-token/issues"
   },
   "homepage": "https://github.com/k4itrun/discord.js-token#readme",
-  "dependencies": {},
+  "dependencies": {
+    "sync-fetch": "^0.5.2"
+  },
   "devDependencies": {
-    "@k4i/eslint-config": "^2.0.0",
-    "@k4i/prettier-config": "^2.0.0",
-    "sync-fetch": "^0.5.2",
+    "@k4i/config": "^1.0.1",
+    "@next/eslint-plugin-next": "^15.3.1",
     "eslint": "^8.55.0",
     "prettier": "^3.0.0"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "unrs-resolver"
+    ]
   }
 }
