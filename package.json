@@ -48,6 +48,7 @@
     "eslint": "^8.55.0",
     "prettier": "^3.0.0"
   },
+  "packageManager": "pnpm@10.9.0",
   "pnpm": {
     "onlyBuiltDependencies": [
       "unrs-resolver"
