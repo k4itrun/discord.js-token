@@ -1,4 +1,23 @@
-# Configuration files
-package.json
-pnpm-lock.yaml
-README.md
+# Root-level files
+package*
+pnpm*
+
+# Node.js
+node_modules/**
+
+# Build output
+dist/**
+
+# Test coverage
+coverage/**
+
+# Editor/IDE settings
+.git/**
+.vscode/**
+.idea/**
+
+# Minified files
+*.min.*
+
+# Misc
+CHANGELOG.md

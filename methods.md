@@ -21,10 +21,10 @@ const token = 'MTA4ODU1NDY5MDI2ODExOTEwMw.*****'; //Required
 const password = '123*****'; //Optional
 const ipAddress = '199.*****'; //Optional
 const ipAddressArray = [
-  //Optional
-  '199.*****',
-  '199.*****',
-  '199.*****',
+ //Optional
+ '199.*****',
+ '199.*****',
+ '199.*****',
 ];
 
 const Discord = DiscordToken(token, /*ipAddress or ipAddressArray,*/ password);

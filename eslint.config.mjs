@@ -1,15 +1,18 @@
 // @ts-check
-import eslintConfig from '@k4i/config/eslint-config';
+import eslintConfig from '@billoneta/config/eslint-config';
+import { defineConfig } from 'eslint/config';
 
 /** @type {import('eslint').Linter.Config[]} */
-export default [
-  ...eslintConfig.base,
-  ...eslintConfig.node,
-  ...eslintConfig.prettier,
+export default defineConfig([
+ eslintConfig.base,
+ eslintConfig.node,
+ eslintConfig.prettier,
+ [
   {
-    name: 'Override',
-    rules: {
-      camelcase: 'off',
-    },
+   name: 'Override',
+   rules: {
+    camelcase: 'off',
+   },
   },
-];
+ ],
+]);

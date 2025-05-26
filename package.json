@@ -32,7 +32,7 @@
   ],
   "author": {
     "name": "k4itrun",
-    "email": "billoneta@proto.me"
+    "email": "tsx@billoneta.xyz"
   },
   "license": "MIT",
   "bugs": {
@@ -43,12 +43,12 @@
     "sync-fetch": "^0.5.2"
   },
   "devDependencies": {
-    "@k4i/config": "^1.0.1",
-    "@next/eslint-plugin-next": "^15.3.1",
+    "@billoneta/config": "^1.0.6",
+    "@billoneta/gitmoji": "^1.0.6",
     "eslint": "^9.25.1",
     "prettier": "^3.0.0"
   },
-  "packageManager": "pnpm@10.9.0",
+  "packageManager": "pnpm@10.11.0",
   "pnpm": {
     "onlyBuiltDependencies": [
       "unrs-resolver"
